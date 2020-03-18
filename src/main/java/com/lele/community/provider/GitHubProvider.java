@@ -36,7 +36,6 @@ public class GitHubProvider {
         Request request = new Request.Builder()
                 .url("https://api.github.com/user?access_token="+acessToken)
                 .build();
-
         try (Response response = client.newCall(request).execute()) {
             String str = response.body().string();
             return JSON.parseObject(str,GitHubUser.class);
