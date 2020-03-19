@@ -5,6 +5,7 @@ import com.lele.community.model.User;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
+import org.springframework.stereotype.Service;
 
 
 @Mapper
@@ -22,4 +23,6 @@ public interface UserMapper {
     @Select("select * from user where token=#{token}")
     User findToken(String token);
 
+    @Select("select * from user where id=#{creator}")
+    User findId(long creator);
 }
