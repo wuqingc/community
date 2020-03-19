@@ -12,7 +12,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.UUID;
@@ -36,7 +38,7 @@ public class AuthorizeController {
     @GetMapping("/callback")
     public String callback(@RequestParam(name = "code") String code,
                            @RequestParam(name = "state") String state,
-                           HttpServletRequest request) throws IOException {
+                           HttpServletRequest request, HttpServletResponse response) throws IOException {
 
         AcessTokenDTO acessTokenDTO = new AcessTokenDTO();
         acessTokenDTO.setCode(code);
@@ -48,18 +50,16 @@ public class AuthorizeController {
         GitHubUser gitHubUser = gitHubProvider.getUser(acessTokenKey);
         if (gitHubUser != null) {
             User user = new User();
-            user.setToken(UUID.randomUUID().toString());
+            String token = UUID.randomUUID().toString();
+            user.setToken(token);
             user.setName(gitHubUser.getName());
             user.setAccount_id(String.valueOf(gitHubUser.getId()));
             user.setGmt_create(System.currentTimeMillis());
             user.setGmt_modified(user.getGmt_modified());
             userMapper.insert(user);
-            /*
-             * 登录成功,写Cookie和Session.
-             * 重定向时,填写的路径为url拼接的路径(直接return的是templates/下的文件名).
-             */
-            HttpSession session = request.getSession();
-            session.setAttribute("user",gitHubUser);
+            response.addCookie(new Cookie("token",token));
+
+
             return "redirect:/";
         } else {
             /*
