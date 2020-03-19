@@ -1,0 +1,1 @@
+alter table QUESTION alter column CREATEOT rename to "creator";
