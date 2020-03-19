@@ -38,6 +38,7 @@ public class GitHubProvider {
                 .build();
         try (Response response = client.newCall(request).execute()) {
             String str = response.body().string();
+            System.out.println(str);
             return JSON.parseObject(str,GitHubUser.class);
         }
     }

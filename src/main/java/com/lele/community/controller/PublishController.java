@@ -56,31 +56,33 @@ public class PublishController {
         }
 
         Cookie[] cookies = request.getCookies();
-        String token = null;
-        for (Cookie cookie : cookies) {
-            if ("token".equals(cookie.getName())){
-                token = cookie.getValue();
-                break;
+        if (cookies != null && cookies.length > 0) {
+            String token = null;
+            for (Cookie cookie : cookies) {
+                if ("token".equals(cookie.getName())) {
+                    token = cookie.getValue();
+                    break;
+                }
             }
-        }
-        User user = userMapper.findToken(token);
-        if (user != null) {
-            HttpSession session = request.getSession();
-            session.setAttribute("user",user);
-        } else {
-            model.addAttribute("error","用户未登录.");
-            return "publish";
-        }
+            User user = userMapper.findToken(token);
+            if (user != null) {
+                HttpSession session = request.getSession();
+                session.setAttribute("user", user);
+            } else {
+                model.addAttribute("error", "用户未登录.");
+                return "publish";
+            }
 
-        Question question = new Question();
-        question.setTitle(title);
-        question.setDescription(description);
-        question.setTag(tag);
-        question.setCreator(user.getId());
-        question.setGmt_create(System.currentTimeMillis());
-        question.setGmt_modified(question.getGmt_create());
-        questionMapper.create(question);
 
+            Question question = new Question();
+            question.setTitle(title);
+            question.setDescription(description);
+            question.setTag(tag);
+            question.setCreator(user.getId());
+            question.setGmt_create(System.currentTimeMillis());
+            question.setGmt_modified(question.getGmt_create());
+            questionMapper.create(question);
+        }
         return "redirect:/";
     }
 }
