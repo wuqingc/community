@@ -9,6 +9,7 @@
 ### 项目资料
 
 * [快速搭建](https://spring.io/guides/gs/serving-web-content/)
+* [spring参考文档](https://docs.spring.io/spring/docs/5.2.5.BUILD-SNAPSHOT/spring-framework-reference/web.html#spring-web)
 * [springboot参考文档](https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#boot-documentation)
 * [thymeleaf参考文档](https://www.thymeleaf.org/doc/tutorials/3.0/usingthymeleaf.html#dialects-the-standard-dialect)
 * [bootstrap组件库](https://v3.bootcss.com/components/#media)

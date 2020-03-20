@@ -23,8 +23,6 @@ public class PublishController {
 
     @Autowired
     private QuestionMapper questionMapper;
-    @Autowired
-    private UserMapper userMapper;
 
     private String path = "publish";
     private String errorInfo = "error";
@@ -66,37 +64,23 @@ public class PublishController {
         }
 
 
-        /*
-         * 如果用户没有登录就进行操作,直接返回错误信息.
-         */
-        Cookie[] cookies = request.getCookies();
-        if (cookies != null && cookies.length > 0) {
-            for (Cookie cookie : cookies) {
-                if ("token".equals(cookie.getName())) {
-                    User user = userMapper.findToken(cookie.getValue());
-                    if (user != null) {
-                        HttpSession session = request.getSession();
-                        session.setAttribute("user", user);
-
-                        /*
-                         * 正常操作:将数据封装成一个实体类Question插入数据库.
-                         */
-                        Question question = new Question();
-                        question.setTitle(title);
-                        question.setDescription(description);
-                        question.setTag(tag);
-                        question.setCreator(user.getId());
-                        question.setGmt_create(System.currentTimeMillis());
-                        question.setGmt_modified(question.getGmt_create());
-                        questionMapper.create(question);
-                    } else {
-                        model.addAttribute(errorInfo, "用户未登录.");
-                        return path;
-                    }
-                    break;
-                }
-            }
+        User user = (User) request.getSession().getAttribute("user");
+        if (user == null) {
+            model.addAttribute(errorInfo, "用户未登录.");
+            return path;
         }
+
+        /*
+         * 正常操作:将数据封装成一个实体类Question插入数据库.
+         */
+        Question question = new Question();
+        question.setTitle(title);
+        question.setDescription(description);
+        question.setTag(tag);
+        question.setCreator(user.getId());
+        question.setGmt_create(System.currentTimeMillis());
+        question.setGmt_modified(question.getGmt_create());
+        questionMapper.create(question);
 
         return "redirect:/";
     }
