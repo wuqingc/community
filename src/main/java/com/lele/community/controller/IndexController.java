@@ -1,5 +1,6 @@
 package com.lele.community.controller;
 
+import com.lele.community.dto.PaginationDTO;
 import com.lele.community.dto.QuestionDTO;
 import com.lele.community.mapper.QuestionMapper;
 import com.lele.community.mapper.UserMapper;
@@ -10,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -26,7 +28,9 @@ public class IndexController {
     private QuestionService questionService;
 
     @GetMapping("/")
-    public String index(HttpServletRequest request, Model model){
+    public String index(HttpServletRequest request, Model model,
+                        @RequestParam(name = "page",defaultValue = "1") Integer page,
+                        @RequestParam(name = "size",defaultValue = "2") Integer size){
         /*
          * 利用token来判断数据库中是否该记录.
          * 如果存在就直接绑定用户信息.
@@ -51,8 +55,8 @@ public class IndexController {
             }
         }
 
-        List<QuestionDTO> questions = questionService.list();
-        model.addAttribute("questions",questions);
+        PaginationDTO pagination = questionService.list(page,size);
+        model.addAttribute("pagination",pagination);
         return "index";
     }
 }
