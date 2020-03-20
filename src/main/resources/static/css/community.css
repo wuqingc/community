@@ -20,3 +20,7 @@ body{
     font-weight: normal;
     color: rgb(153, 153, 153);
 }
+
+.profile .section{
+    margin-top: 15px;
+}

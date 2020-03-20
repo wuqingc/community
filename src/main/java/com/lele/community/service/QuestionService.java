@@ -79,4 +79,52 @@ public class QuestionService {
 
         return paginationDTO;
     }
+
+    public PaginationDTO list(Integer userId, Integer page, Integer size) {
+        PaginationDTO paginationDTO = new PaginationDTO();
+        /*
+         * 设置总页数.
+         */
+        Integer totalCount = questionMapper.countByUserId(userId);
+        if (totalCount % size == 0 && totalCount != 0){
+            paginationDTO.setTotalPage(totalCount / size);
+        } else {
+            paginationDTO.setTotalPage(totalCount / size + 1);
+        }
+
+        /*
+         * 当页数超出限制时采取的方式.
+         */
+        int totalPage = paginationDTO.getTotalPage();
+        if (page < 1){
+            page = 1;
+        }
+        if (page > totalPage) {
+            page = totalPage;
+        }
+
+        paginationDTO.setPagination(page);
+
+        /*
+         * 具体的查询操作:
+         * 算出偏移量,然后与页数一起作为参数查找,返回符合条件的问题列表.
+         */
+        Integer offset = size * (page - 1);
+        List<Question> questions = questionMapper.listByUserId(offset,size,userId);
+
+        /*
+         * 封装之后返回当前页对象.
+         */
+        List<QuestionDTO> questionDTOS = new ArrayList<>();
+        for (Question question : questions) {
+            User user = userMapper.findId(question.getCreator());
+            QuestionDTO questionDTO = new QuestionDTO();
+            BeanUtils.copyProperties(question,questionDTO);
+            questionDTO.setUser(user);
+            questionDTOS.add(questionDTO);
+        }
+        paginationDTO.setQuestionDTOS(questionDTOS);
+
+        return paginationDTO;
+    }
 }
