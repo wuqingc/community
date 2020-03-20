@@ -1,12 +1,9 @@
 package com.lele.community.mapper;
 
-
 import com.lele.community.model.User;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
-import org.springframework.stereotype.Service;
-
 
 @Mapper
 public interface UserMapper {

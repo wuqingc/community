@@ -27,34 +27,39 @@ public class IndexController {
     @Autowired
     private QuestionService questionService;
 
+    /**
+     * 主页面的请求
+     * @param request
+     * @param model
+     * @param page 分页的请求页
+     * @param size 每页的数据
+     * @return 写好的html页面
+     */
     @GetMapping("/")
     public String index(HttpServletRequest request, Model model,
                         @RequestParam(name = "page",defaultValue = "1") Integer page,
-                        @RequestParam(name = "size",defaultValue = "2") Integer size){
+                        @RequestParam(name = "size",defaultValue = "5") Integer size){
         /*
-         * 利用token来判断数据库中是否该记录.
-         * 如果存在就直接绑定用户信息.
+         * 取出Cookie中的token,利用token来判断数据库中是否该记录.
+         * 如果存在就直接在session上绑定用户信息.
          */
         Cookie[] cookies = request.getCookies();
-        String token = null;
         if (cookies != null && cookies.length > 0) {
             for (Cookie cookie : cookies) {
                 if ("token".equals(cookie.getName())) {
-                    token = cookie.getValue();
+                    User user = userMapper.findToken(cookie.getValue());
+                    if (user != null) {
+                        HttpSession session = request.getSession();
+                        session.setAttribute("user", user);
+                    }
                     break;
                 }
             }
-            User user = userMapper.findToken(token);
-            if (user != null) {
-                /*
-                 * 登录成功,写Cookie和Session.
-                 * 重定向时,填写的路径为url拼接的路径(直接return的是templates/下的文件名).
-                 */
-                HttpSession session = request.getSession();
-                session.setAttribute("user", user);
-            }
         }
 
+        /*
+         * 实现查找记录,并将查找到的记录封装成一个对象传递给前台.
+         */
         PaginationDTO pagination = questionService.list(page,size);
         model.addAttribute("pagination",pagination);
         return "index";

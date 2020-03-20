@@ -8,10 +8,6 @@ import java.util.List;
 @Data
 public class PaginationDTO {
     private List<QuestionDTO> questionDTOS;
-    /**
-     * 向前按钮
-     * 第一页按钮
-     */
     private boolean showPrevious;
     private boolean showFirstPage;
     private boolean showNext;
@@ -22,9 +18,11 @@ public class PaginationDTO {
     private List<Integer> pages = new ArrayList<>();
 
     public void setPagination(Integer page) {
-
         this.currentPage = page;
 
+        /*
+         * 设置显示的分页按钮列表.
+         */
         pages.add(page);
         for (int i = 1; i <= 3; i++){
             if (page - i > 0) {
@@ -35,6 +33,9 @@ public class PaginationDTO {
             }
         }
 
+        /*
+         * 设置前进后退选项的可见性.
+         */
         if (page == 1){
             showPrevious = false;
         } else {
