@@ -127,4 +127,16 @@ public class QuestionService {
 
         return paginationDTO;
     }
+
+    public QuestionDTO listByQuestionId(Integer id) {
+        Question question = questionMapper.listByQuestionId(id);
+        QuestionDTO questionDTO = new QuestionDTO();
+        /*
+         * 基于反射来使对象进行赋值
+         */
+        BeanUtils.copyProperties(question,questionDTO);
+        User user = userMapper.findId(question.getCreator());
+        questionDTO.setUser(user);
+        return questionDTO;
+    }
 }

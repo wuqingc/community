@@ -20,6 +20,15 @@ public class ProfileController {
     @Autowired
     private QuestionService questionService;
 
+    /**
+     *
+     * @param action 占位符写法,可以在下面直接拿到.
+     * @param model
+     * @param request
+     * @param page
+     * @param size
+     * @return
+     */
     @GetMapping("/profile/{action}")
     public String profile(@PathVariable(name = "action") String action,
                           Model model,
