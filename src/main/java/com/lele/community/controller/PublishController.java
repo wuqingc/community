@@ -1,13 +1,16 @@
 package com.lele.community.controller;
 
+import com.lele.community.dto.QuestionDTO;
 import com.lele.community.mapper.QuestionMapper;
 import com.lele.community.mapper.UserMapper;
 import com.lele.community.model.Question;
 import com.lele.community.model.User;
+import com.lele.community.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import javax.servlet.http.Cookie;
@@ -22,7 +25,7 @@ import javax.servlet.http.HttpSession;
 public class PublishController {
 
     @Autowired
-    private QuestionMapper questionMapper;
+    private QuestionService questionService;
 
     private String path = "publish";
     private String errorInfo = "error";
@@ -33,10 +36,23 @@ public class PublishController {
         return path;
     }
 
+    @GetMapping("/publish/{id}")
+    public String edit(@PathVariable(name = "id") int id,
+                       Model model){
+        QuestionDTO question = questionService.listByQuestionId(id);
+        model.addAttribute("title",question.getTitle());
+        model.addAttribute("description",question.getDescription());
+        model.addAttribute("tag",question.getTag());
+        model.addAttribute("id",id);
+        return "publish";
+    }
+
+
     @PostMapping("/publish")
     public String doPublish(@RequestParam(name = "title") String title,
                             @RequestParam(name = "description") String description,
                             @RequestParam(name = "tag") String tag,
+                            @RequestParam(name = "id") int id,
                             HttpServletRequest request,
                             Model model
                             ){
@@ -80,8 +96,8 @@ public class PublishController {
         question.setCreator(user.getId());
         question.setGmt_create(System.currentTimeMillis());
         question.setGmt_modified(question.getGmt_create());
-        questionMapper.create(question);
-
+        question.setId(id);
+        questionService.updateOrInsert(question);
         return "redirect:/";
     }
 }

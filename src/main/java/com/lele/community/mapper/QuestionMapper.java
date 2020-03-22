@@ -2,10 +2,7 @@ package com.lele.community.mapper;
 
 import com.lele.community.dto.QuestionDTO;
 import com.lele.community.model.Question;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -29,4 +26,7 @@ public interface QuestionMapper {
 
     @Select("select * from question where id = #{id}")
     Question listByQuestionId(Integer id);
+
+    @Update("update question set title=#{title},description=#{description},tag=#{tag},gmt_modified=#{gmt_modified} where id=#{id}")
+    void updateById(Question question);
 }

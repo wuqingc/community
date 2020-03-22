@@ -139,4 +139,13 @@ public class QuestionService {
         questionDTO.setUser(user);
         return questionDTO;
     }
+
+    public void updateOrInsert(Question question) {
+        if (question.getId() == 0) {
+            questionMapper.create(question);
+        } else {
+            question.setGmt_modified(question.getGmt_create());
+            questionMapper.updateById(question);
+        }
+    }
 }
