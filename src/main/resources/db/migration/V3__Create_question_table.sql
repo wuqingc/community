@@ -1,6 +1,6 @@
 create table QUESTION
 (
-    ID            INT auto_increment,
+    ID            INT primary key auto_increment,
     TITLE         VARCHAR(50),
     DESCRIPTION   TEXT,
     GMT_CREATE    BIGINT,
@@ -11,6 +11,3 @@ create table QUESTION
     LIKE_COUNT    INT default 0,
     TAG           VARCHAR(256)
 );
-
-create unique index QUESTION_ID_UINDEX
-    on QUESTION (ID);

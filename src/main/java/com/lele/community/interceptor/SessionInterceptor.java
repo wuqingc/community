@@ -2,6 +2,7 @@ package com.lele.community.interceptor;
 
 import com.lele.community.mapper.UserMapper;
 import com.lele.community.model.User;
+import com.lele.community.model.UserExample;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -11,6 +12,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.util.List;
 
 /**
  * 得先让Spring接管,之后才能使用Spring注解.
@@ -32,10 +34,13 @@ public class SessionInterceptor implements HandlerInterceptor {
         if (cookies != null && cookies.length > 0) {
             for (Cookie cookie : cookies) {
                 if ("token".equals(cookie.getName())) {
-                    User user = userMapper.findToken(cookie.getValue());
-                    if (user != null) {
-                        HttpSession session = request.getSession();
-                        session.setAttribute("user", user);
+                    UserExample userExample = new UserExample();
+                    userExample.createCriteria().andTokenEqualTo(cookie.getValue());
+
+                    List<User> users = userMapper.selectByExample(userExample);
+                    if (users.size() != 0) {
+                        User user = users.get(0);
+                        request.getSession().setAttribute("user",user);
                     }
                     break;
                 }

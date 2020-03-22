@@ -28,3 +28,8 @@
 * [H2数据库快速搭建](https://www.h2database.com/html/quickstart.html)
 * [集成mybatis](http://mybatis.org/spring-boot-starter/mybatis-spring-boot-autoconfigure/)
 
+### 脚本
+
+* mvn -Dmybatis.generator.overwrite=true mybatis-generator:generate
+* mvn flyway:migrate
+

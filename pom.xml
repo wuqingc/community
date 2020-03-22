@@ -32,12 +32,7 @@
             <artifactId>fastjson</artifactId>
             <version>1.2.66</version>
         </dependency>
-        <!-- 引入H2数据库 -->
-        <dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>
-            <version>1.4.200</version>
-        </dependency>
+
         <!-- 集成Mybatis框架 -->
         <dependency>
             <groupId>org.mybatis.spring.boot</groupId>
@@ -50,6 +45,12 @@
             <artifactId>spring-boot-starter-thymeleaf</artifactId>
         </dependency>
 
+    <!--引入mysql数据库-->
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>5.1.44</version>
+        </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-jdbc</artifactId>
@@ -71,11 +72,6 @@
                 </exclusion>
             </exclusions>
         </dependency>
-
-
-
-
-
 
 
         <dependency>
@@ -100,19 +96,33 @@
             </plugin>
 
             <plugin>
+                <groupId>org.mybatis.generator</groupId>
+                <artifactId>mybatis-generator-maven-plugin</artifactId>
+                <version>1.4.0</version>
+<!--                需要调用驱动才能使用数据库文件.-->
+                <dependencies>
+                    <dependency>
+                        <groupId>mysql</groupId>
+                        <artifactId>mysql-connector-java</artifactId>
+                        <version>5.1.44</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+
+            <plugin>
                 <groupId>org.flywaydb</groupId>
                 <artifactId>flyway-maven-plugin</artifactId>
                 <version>6.3.1</version>
                 <configuration>
-                    <url>jdbc:h2:D:\develop</url>
-                    <user>sa</user>
-                    <password>123</password>
+                    <url>jdbc:mysql://localhost:3306/community?useSSL=false</url>
+                    <user>root</user>
+                    <password>123456</password>
                 </configuration>
                 <dependencies>
                     <dependency>
-                        <groupId>com.h2database</groupId>
-                        <artifactId>h2</artifactId>
-                        <version>1.4.200</version>
+                        <groupId>mysql</groupId>
+                        <artifactId>mysql-connector-java</artifactId>
+                        <version>5.1.44</version>
                     </dependency>
                 </dependencies>
             </plugin>

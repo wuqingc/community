@@ -52,10 +52,13 @@ public class PublishController {
     public String doPublish(@RequestParam(name = "title") String title,
                             @RequestParam(name = "description") String description,
                             @RequestParam(name = "tag") String tag,
-                            @RequestParam(name = "id") int id,
+                            @RequestParam(name = "id",defaultValue = "0") String id,
                             HttpServletRequest request,
                             Model model
                             ){
+//        if ("".equals(id)){
+//            id = "0";
+//        }
         /*
          * 失败后可以回显正确的数据.
          */
@@ -94,9 +97,9 @@ public class PublishController {
         question.setDescription(description);
         question.setTag(tag);
         question.setCreator(user.getId());
-        question.setGmt_create(System.currentTimeMillis());
-        question.setGmt_modified(question.getGmt_create());
-        question.setId(id);
+        question.setGmtCreate(System.currentTimeMillis());
+        question.setGmtModified(question.getGmtCreate());
+        question.setId(Integer.valueOf(id));
         questionService.updateOrInsert(question);
         return "redirect:/";
     }

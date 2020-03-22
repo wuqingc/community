@@ -2,8 +2,11 @@ package com.lele.community.service;
 
 import com.lele.community.mapper.UserMapper;
 import com.lele.community.model.User;
+import com.lele.community.model.UserExample;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class UserService {
@@ -12,14 +15,22 @@ public class UserService {
     private UserMapper userMapper;
 
     public void updateOrInsert(User user) {
-        User dbUser = userMapper.selectByCountId(user.getAccount_id());
-        if (dbUser == null){
+        UserExample userExample = new UserExample();
+        userExample.createCriteria().andTokenEqualTo(user.getAccountId());
+        List<User> users = userMapper.selectByExample(userExample);
+        if (users.size() == 0){
             userMapper.insert(user);
         } else {
-            dbUser.setToken(user.getToken());
-            dbUser.setGmt_modified(System.currentTimeMillis());
-            dbUser.setAvatar_url(user.getAvatar_url());
-            userMapper.update(dbUser);
+            User dbUser = users.get(0);
+
+            User updateUser = new User();
+            updateUser.setToken(user.getToken());
+            updateUser.setGmtModified(System.currentTimeMillis());
+            updateUser.setAvatarUrl(user.getAvatarUrl());
+
+            UserExample example = new UserExample();
+            example.createCriteria().andIdEqualTo(dbUser.getId());
+            userMapper.updateByExampleSelective(updateUser,example);
         }
     }
 }

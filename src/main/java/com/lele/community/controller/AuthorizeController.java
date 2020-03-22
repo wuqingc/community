@@ -80,9 +80,9 @@ public class AuthorizeController {
             String token = UUID.randomUUID().toString();
             user.setToken(token);
             user.setName(gitHubUser.getName());
-            user.setAccount_id(String.valueOf(gitHubUser.getId()));
-            user.setGmt_modified(System.currentTimeMillis());
-            user.setAvatar_url(gitHubUser.getAvatar_url());
+            user.setAccountId(String.valueOf(gitHubUser.getId()));
+            user.setGmtCreate(System.currentTimeMillis());
+            user.setAvatarUrl(gitHubUser.getAvatar_url());
             userService.updateOrInsert(user);
             response.addCookie(new Cookie("token",token));
         }

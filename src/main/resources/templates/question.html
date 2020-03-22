@@ -23,8 +23,8 @@
             </h4>
             <span class="text-desc">
                 作者: <span th:text="${question.user.name}"></span>&nbsp;|&nbsp;
-                发布时间: <span th:text="${#dates.format(question.gmt_create,'YYYY-MM-dd HH:mm')}"></span>&nbsp;|&nbsp;
-                阅读数: <span th:text="${question.view_count}"></span>&nbsp;
+                发布时间: <span th:text="${#dates.format(question.gmtCreate,'YYYY-MM-dd HH:mm')}"></span>&nbsp;|&nbsp;
+                阅读数: <span th:text="${question.viewCount}"></span>&nbsp;
             </span>
             <hr>
 
@@ -40,7 +40,7 @@
             <h3>提交回复</h3>
             <hr>
             <h3>
-                <span th:text="${question.comment_count}"></span>&nbsp;个回复
+                <span th:text="${question.commentCount}"></span>&nbsp;个回复
             </h3>
         </div>
 
@@ -50,7 +50,7 @@
             <div class="media">
                 <div class="media-left media-bottom" >
                     <a href="#">
-                        <img class="media-object img-rounded" th:src="${question.user.avatar_url}">
+                        <img class="media-object img-rounded" th:src="${question.user.avatarUrl}">
                     </a>
                 </div>
                 <div class="media-body">
