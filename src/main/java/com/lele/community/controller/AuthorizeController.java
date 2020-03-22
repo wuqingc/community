@@ -5,6 +5,7 @@ import com.lele.community.dto.GitHubUser;
 import com.lele.community.mapper.UserMapper;
 import com.lele.community.model.User;
 import com.lele.community.provider.GitHubProvider;
+import com.lele.community.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -34,6 +35,9 @@ public class AuthorizeController {
     private String clientSecret;
     @Value("${github.redirect.url}")
     private String redirectUrl;
+
+    @Autowired
+    private UserService userService;
 
     /**
      * github回调的路径.
@@ -77,12 +81,26 @@ public class AuthorizeController {
             user.setToken(token);
             user.setName(gitHubUser.getName());
             user.setAccount_id(String.valueOf(gitHubUser.getId()));
-            user.setGmt_create(System.currentTimeMillis());
-            user.setGmt_modified(user.getGmt_modified());
+            user.setGmt_modified(System.currentTimeMillis());
             user.setAvatar_url(gitHubUser.getAvatar_url());
-            userMapper.insert(user);
+            userService.updateOrInsert(user);
             response.addCookie(new Cookie("token",token));
         }
+        return "redirect:/";
+    }
+
+    @GetMapping("/logout")
+    public String logout(HttpServletRequest request,
+                         HttpServletResponse response){
+
+        request.getSession().removeAttribute("user");
+
+        /*
+         * cookie是个map结构,删除的时候直接替换就行.
+         */
+        Cookie cookie = new Cookie("token",null);
+        cookie.setMaxAge(0);
+        response.addCookie(cookie);
         return "redirect:/";
     }
 }

@@ -4,6 +4,7 @@ import com.lele.community.model.User;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 @Mapper
 public interface UserMapper {
@@ -22,4 +23,10 @@ public interface UserMapper {
 
     @Select("select * from user where id=#{creator}")
     User findId(long creator);
+
+    @Select("select * from user where account_id=#{account_id}")
+    User selectByCountId(String account_id);
+
+    @Update("update user set name=#{name},token=#{token},gmt_modified=#{gmt_modified},avatar_url=#{avatar_url} where id=#{id}")
+    void update(User user);
 }

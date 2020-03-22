@@ -34,7 +34,7 @@
             </div>
             <hr>
             <a class="community-menu" th:href="@{'/publish' + ${question.id} }">
-                <span class="glyphicon glyphicon-pencil" aria-hidden="true">编辑</span>
+                <span class="glyphicon glyphicon-pencil" aria-hidden="true" th:if="${session.user.id} == ${question.creator}">编辑</span>
             </a>
             <hr>
             <h3>提交回复</h3>
