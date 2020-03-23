@@ -37,7 +37,7 @@ public class PublishController {
     }
 
     @GetMapping("/publish/{id}")
-    public String edit(@PathVariable(name = "id") int id,
+    public String edit(@PathVariable(name = "id") Long id,
                        Model model){
         QuestionDTO question = questionService.listByQuestionId(id);
         model.addAttribute("title",question.getTitle());
@@ -99,7 +99,7 @@ public class PublishController {
         question.setCreator(user.getId());
         question.setGmtCreate(System.currentTimeMillis());
         question.setGmtModified(question.getGmtCreate());
-        question.setId(Integer.valueOf(id));
+        question.setId(Long.valueOf(id));
 
         questionService.updateOrInsert(question);
         return "redirect:/";
