@@ -175,6 +175,9 @@ public class QuestionService {
             updateQuestion.setDescription(question.getDescription());
             int update = questionMapper.updateByExampleSelective(updateQuestion,questionExample);
             if (update != 1) {
+                /*
+                 * 直接传入定义好的注解就可以.
+                 */
                 throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
             }
         }
