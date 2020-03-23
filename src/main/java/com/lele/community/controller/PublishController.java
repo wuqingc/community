@@ -100,6 +100,7 @@ public class PublishController {
         question.setGmtCreate(System.currentTimeMillis());
         question.setGmtModified(question.getGmtCreate());
         question.setId(Integer.valueOf(id));
+
         questionService.updateOrInsert(question);
         return "redirect:/";
     }

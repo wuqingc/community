@@ -2,6 +2,9 @@ package com.lele.community.service;
 
 import com.lele.community.dto.PaginationDTO;
 import com.lele.community.dto.QuestionDTO;
+import com.lele.community.exception.CustomizeErrorCode;
+import com.lele.community.exception.CustomizeException;
+import com.lele.community.mapper.QuestionExtMapper;
 import com.lele.community.mapper.QuestionMapper;
 import com.lele.community.mapper.UserMapper;
 import com.lele.community.model.Question;
@@ -25,6 +28,10 @@ public class QuestionService {
 
     @Autowired
     private QuestionMapper questionMapper;
+
+    @Autowired
+    private QuestionExtMapper questionExtMapper;
+
     @Autowired
     private UserMapper userMapper;
 
@@ -138,6 +145,9 @@ public class QuestionService {
 
     public QuestionDTO listByQuestionId(Integer id) {
         Question question = questionMapper.selectByPrimaryKey(id);
+        if (question == null) {
+            throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
+        }
         QuestionDTO questionDTO = new QuestionDTO();
         /*
          * 基于反射来使对象进行赋值
@@ -150,6 +160,9 @@ public class QuestionService {
 
     public void updateOrInsert(Question question) {
         if (question.getId() == 0) {
+            question.setViewCount(0);
+            question.setCommentCount(0);
+            question.setLikeCount(0);
             questionMapper.insert(question);
         } else {
             QuestionExample questionExample = new QuestionExample();
@@ -160,7 +173,17 @@ public class QuestionService {
             updateQuestion.setTag(question.getTag());
             updateQuestion.setTitle(question.getTitle());
             updateQuestion.setDescription(question.getDescription());
-            questionMapper.updateByExampleSelective(updateQuestion,questionExample);
+            int update = questionMapper.updateByExampleSelective(updateQuestion,questionExample);
+            if (update != 1) {
+                throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
+            }
         }
+    }
+
+    public void inView(Integer id) {
+        Question updateQuestion = new Question();
+        updateQuestion.setViewCount(1);
+        updateQuestion.setId(id);
+        questionExtMapper.incView(updateQuestion);
     }
 }
