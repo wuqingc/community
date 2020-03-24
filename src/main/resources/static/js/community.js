@@ -11,7 +11,17 @@ function post() {
         dataType: "json",
         contentType: "application/json;charset=UTF-8",
         success: function (result) {
-            console.log(result);
+            if (result.code === 200){
+                console.log(result);
+            } else {
+                if (result.code === 2003) {
+                    var accept = confirm(result.message);
+                    if (accept) {
+                        window.open("https://github.com/login/oauth/authorize?client_id=382e5710bc068c24c967&redirect_uri=http://localhost:8080/callback&scope=user&state=1");
+                        window.localStorage.setItem("closeable",true);
+                    }
+                }
+            }
         }
     });
 }

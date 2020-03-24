@@ -10,6 +10,18 @@
     <script src="/js/jquery-3.4.1.min.js" type="application/javascript"></script>
     <script src="/js/bootstrap.min.js" type="application/javascript"></script>
 </head>
+
+<script type="application/javascript">
+    window.onload = function () {
+        debugger;
+        var closeable = window.localStorage.getItem("closeable");
+        if (closeable === "true") {
+            window.close();
+            window.localStorage.removeItem("closeable");
+        }
+    }
+</script>
+
 <body>
 
 <div th:insert="~{navigation :: nav}"></div>

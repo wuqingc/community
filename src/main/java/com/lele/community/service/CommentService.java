@@ -1,16 +1,25 @@
 package com.lele.community.service;
 
+import com.lele.community.dto.CommentCreateDTO;
+import com.lele.community.dto.CommentDTO;
 import com.lele.community.enums.CommentTypeEnum;
 import com.lele.community.exception.CustomizeErrorCode;
 import com.lele.community.exception.CustomizeException;
 import com.lele.community.mapper.CommentMapper;
 import com.lele.community.mapper.QuestionExtMapper;
 import com.lele.community.mapper.QuestionMapper;
-import com.lele.community.model.Comment;
-import com.lele.community.model.Question;
+import com.lele.community.mapper.UserMapper;
+import com.lele.community.model.*;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class CommentService {
@@ -23,6 +32,9 @@ public class CommentService {
 
     @Autowired
     private QuestionExtMapper questionExtMapper;
+
+    @Autowired
+    private UserMapper userMapper;
 
     /**
      * 新增评论时需要进行一些验证.
@@ -61,5 +73,38 @@ public class CommentService {
             question.setCommentCount(1);
             questionExtMapper.incCommentCount(question);
         }
+    }
+
+    public List<CommentCreateDTO> listByQuestionId(Long id) {
+        CommentExample commentExample = new CommentExample();
+        commentExample.createCriteria().andParentIdEqualTo(id)
+                .andTypeEqualTo(CommentTypeEnum.QUESTION.getType());
+        List<Comment> comments = commentMapper.selectByExample(commentExample);
+        if (comments.isEmpty()) {
+            return new ArrayList<>();
+        }
+
+        /*
+         * 获取评论人.
+         */
+        Set<Long> commentators = comments.stream().map(Comment::getCommentator).collect(Collectors.toSet());
+        UserExample userExample = new UserExample();
+        userExample.createCriteria().andIdIn(new ArrayList<>(commentators));
+        List<User> users = userMapper.selectByExample(userExample);
+
+        Map<Long,User> userMap = users.stream().collect(
+                Collectors.toMap(User::getId, user -> user)
+        );
+
+        /*
+         * 将评论人与Comment记录联系起来,封装成一个记录返回.
+         */
+
+        return comments.stream().map(comment -> {
+            CommentCreateDTO commentCreateDTO = new CommentCreateDTO();
+            BeanUtils.copyProperties(comment,commentCreateDTO);
+            commentCreateDTO.setUser(userMap.get(commentCreateDTO.getCommentator()));
+            return commentCreateDTO;
+        }).collect(Collectors.toList());
     }
 }

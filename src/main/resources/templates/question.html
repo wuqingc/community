@@ -29,23 +29,44 @@
             </span>
             <hr>
 
-            <div th:text="${question.description}">
+            <div th:text="${question.description}" style="margin: 35px;">
 
 
             </div>
             <hr>
+            <div th:if="${session.user} != null and ${session.user.id} == ${question.creator}">
             <a class="community-menu" th:href="@{'/publish/' + ${question.id} }">
-                <span class="glyphicon glyphicon-pencil" aria-hidden="true"
-                      th:if="${session.user.id} == ${question.creator}">编辑</span>
+                <span class="glyphicon glyphicon-pencil" aria-hidden="true">编辑</span>
             </a>
             <hr>
+            </div>
+
             <h3>
                 <span th:text="${question.commentCount}"></span>&nbsp;个回复
             </h3>
             <hr>
-            <h3>提交回复</h3>
-            <hr>
+            <div class="media media-comment" th:each="comment : ${commentCreateDTOS}">
+                <div class="media-left" >
+                    <a href="#">
+                        <img class="media-object img-rounded" th:src="${comment.user.getAvatarUrl()}">
+                    </a>
+                </div>
+                <div class="media-body">
+                    <h4 class="media-heading">
+                        <span  th:text="${comment.user.getName()}"></span>
+                    </h4>
+                    <span th:text="${comment.getContent()}"></span>
 
+                    <div>
+                        <span class="glyphicon glyphicon-thumbs-up icon-comment"></span>
+                        <span class="glyphicon glyphicon glyphicon-comment icon-comment"></span>
+                        <span class="text-desc pull-right" th:text="${#dates.format(comment.getGmtCreate(),'YYYY-MM-dd HH:mm')}"></span>
+                    </div>
+                </div>
+            </div>
+
+            <hr>
+            <h3>提交回复</h3>
             <div class="media">
                 <div class="media-left media-bottom">
                     <a href="#">

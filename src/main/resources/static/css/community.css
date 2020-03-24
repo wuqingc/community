@@ -48,3 +48,18 @@ body {
 .btn-comment {
     float: right;
 }
+
+.icon-comment {
+    color: #999;
+    cursor: pointer;
+    margin-top: 5px;
+}
+.icon-comment:hover{
+    color: #499ef3;
+}
+
+.media-comment{
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #9d9d9d;
+}
