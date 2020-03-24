@@ -10,6 +10,7 @@ import com.lele.community.model.Comment;
 import com.lele.community.model.Question;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class CommentService {
@@ -24,9 +25,10 @@ public class CommentService {
     private QuestionExtMapper questionExtMapper;
 
     /**
-     * 新增评论时需要进行判定.
+     * 新增评论时需要进行一些验证.
      * @param comment
      */
+    @Transactional
     public void insert(Comment comment) {
         /*
          * 当评论的绑定值不存在时,需要抛出异常,不能插入.

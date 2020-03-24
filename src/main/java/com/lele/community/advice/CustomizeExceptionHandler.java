@@ -25,6 +25,9 @@ public class CustomizeExceptionHandler {
                                      HttpServletResponse response,
                                            Throwable ex,
                                            Model model) throws IOException {
+        /*
+         * 需要区分请求的格式.
+         */
         String contentType = request.getContentType();
         if ("application/json".equals(contentType)) {
             ResultDTO resultDTO;
