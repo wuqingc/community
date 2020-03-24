@@ -59,7 +59,17 @@
 
                     <div>
                         <span class="glyphicon glyphicon-thumbs-up icon-comment"></span>
-                        <span class="glyphicon glyphicon glyphicon-comment icon-comment"></span>
+                        <a role="button" data-toggle="collapse"  th:href="'#collapseExample' + ${comment.id}" th:data-id="${comment.id}" onclick="collapseComments(this)">
+                            <span class="glyphicon glyphicon glyphicon-comment icon-comment"></span>
+                        </a>
+                        <div th:class="collapse" th:id="'collapseExample' +  ${comment.id}">
+                            <div class="well two-comment" >
+                                <div th:id="'comment-' + ${comment.id}"></div>
+                                <textarea class="form-control comment" rows="1" th:id="'input-'+${comment.id}"></textarea>
+                                <button type="button" class="btn btn-success btn-comment" onclick="comment(this)" th:data-id="${comment.id}">评论</button>
+                            </div>
+                        </div>
+
                         <span class="text-desc pull-right" th:text="${#dates.format(comment.getGmtCreate(),'YYYY-MM-dd HH:mm')}"></span>
                     </div>
                 </div>

@@ -1,13 +1,17 @@
 function post() {
     var questionId = $("#question_id").val();
     var content = $(".comment").val();
-    var category = {"parentId": questionId, "type": 1,"content": content};
-    var jsonData = JSON.stringify(category);
+    comment2Target(questionId,1,content);
+}
 
+function comment2Target(targetId,type,content) {
     if (!content) {
         alert("不能回复空内容哦.");
         return;
     }
+
+    var category = {"parentId": targetId, "type": type,"content": content};
+    var jsonData = JSON.stringify(category);
 
     $.ajax({
         type: "post",
@@ -33,4 +37,54 @@ function post() {
             }
         }
     });
+}
+
+function comment(e) {
+    var commentId = e.getAttribute("data-id");
+    var content = $("#input-" + commentId).val();
+    console.log(commentId + "   " + content);
+    comment2Target(commentId,2,content);
+}
+
+
+function collapseComments(e) {
+    var id = e.getAttribute("data-id");
+
+
+    Date.prototype.format = function (fmt) {
+        var o = {
+            "M+": this.getMonth() + 1, //月份
+            "d+": this.getDate(), //日
+            "H+": this.getHours(), //小时
+            "m+": this.getMinutes(), //分
+            "s+": this.getSeconds(), //秒
+            "q+": Math.floor((this.getMonth() + 3) / 3), //季度
+            "S": this.getMilliseconds() //毫秒
+        };
+        if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+        for (var k in o)
+            if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+        return fmt;
+    };
+
+    $.getJSON("/comment/"+id,function (data) {
+        var listInfo="";
+        $.each(data.data,function (){
+            var now_date = new Date(this.gmtCreate).format("yyyy-MM-dd");
+            listInfo += "<div class=\"media media-comment\" id='media-comment'>\n" +
+                "             <div class=\"media-left\" >\n" +
+                "                  <a href=\"#\">\n" +
+                "                       <img class=\"media-object img-rounded\" src=" + this.user.avatarUrl + ">\n" +
+                "                                        </a>\n" +
+                "                                    </div>\n" +
+                "                                    <div class=\"media-body\">\n" +
+                "                                        <h5 class=\"media-heading\">\n" +
+                "                                            <span>" + this.user.name +"</span>\n" +
+                "                                        </h5>\n" +
+                "                                        <span>" + this.content +"</span>\n" +
+                "                                    </div>\n" + "<span class=\"text-desc pull-right\">"+ now_date + "</span>" +
+                "                                </div>";
+        });
+        $("#comment-" + id)[0].innerHTML = listInfo;
+    })
 }

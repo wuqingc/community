@@ -72,10 +72,10 @@ public class CommentService {
         }
     }
 
-    public List<CommentCreateDTO> listByQuestionId(Long id) {
+    public List<CommentCreateDTO> listByTargetId(Long id, CommentTypeEnum commentTypeEnum) {
         CommentExample commentExample = new CommentExample();
         commentExample.createCriteria().andParentIdEqualTo(id)
-                .andTypeEqualTo(CommentTypeEnum.QUESTION.getType());
+                .andTypeEqualTo(commentTypeEnum.getType());
         List<Comment> comments = commentMapper.selectByExample(commentExample);
         comments.sort((o1,o2)-> (int) (o2.getGmtCreate() - o1.getGmtCreate()));
         if (comments.isEmpty()) {

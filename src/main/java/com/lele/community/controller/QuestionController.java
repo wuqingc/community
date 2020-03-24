@@ -2,8 +2,7 @@ package com.lele.community.controller;
 
 import com.lele.community.dto.CommentCreateDTO;
 import com.lele.community.dto.QuestionDTO;
-import com.lele.community.mapper.QuestionMapper;
-import com.lele.community.model.Question;
+import com.lele.community.enums.CommentTypeEnum;
 import com.lele.community.service.CommentService;
 import com.lele.community.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +26,7 @@ public class QuestionController {
     public String question(@PathVariable(name = "id") Long id,
                            Model model){
 
-        List<CommentCreateDTO> commentCreateDTOS = commentService.listByQuestionId(id);
+        List<CommentCreateDTO> commentCreateDTOS = commentService.listByTargetId(id, CommentTypeEnum.QUESTION);
         model.addAttribute("commentCreateDTOS",commentCreateDTOS);
 
         questionService.inView(id);
