@@ -15,10 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -80,6 +77,7 @@ public class CommentService {
         commentExample.createCriteria().andParentIdEqualTo(id)
                 .andTypeEqualTo(CommentTypeEnum.QUESTION.getType());
         List<Comment> comments = commentMapper.selectByExample(commentExample);
+        comments.sort((o1,o2)-> (int) (o2.getGmtCreate() - o1.getGmtCreate()));
         if (comments.isEmpty()) {
             return new ArrayList<>();
         }

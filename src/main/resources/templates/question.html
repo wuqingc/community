@@ -41,9 +41,9 @@
             <hr>
             </div>
 
-            <h3>
+            <h4>
                 <span th:text="${question.commentCount}"></span>&nbsp;个回复
-            </h3>
+            </h4>
             <hr>
             <div class="media media-comment" th:each="comment : ${commentCreateDTOS}">
                 <div class="media-left" >
@@ -52,9 +52,9 @@
                     </a>
                 </div>
                 <div class="media-body">
-                    <h4 class="media-heading">
+                    <h5 class="media-heading">
                         <span  th:text="${comment.user.getName()}"></span>
-                    </h4>
+                    </h5>
                     <span th:text="${comment.getContent()}"></span>
 
                     <div>
@@ -66,7 +66,7 @@
             </div>
 
             <hr>
-            <h3>提交回复</h3>
+            <h4>提交回复</h4>
             <div class="media">
                 <div class="media-left media-bottom">
                     <a href="#">

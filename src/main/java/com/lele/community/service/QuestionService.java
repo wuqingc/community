@@ -85,6 +85,7 @@ public class QuestionService {
             questionDTO.setUser(user);
             questionDTOS.add(questionDTO);
         }
+        questionDTOS.sort((o1,o2) -> (int) (o2.getGmtCreate() - o1.getGmtCreate()));
         paginationDTO.setQuestionDTOS(questionDTOS);
 
         return paginationDTO;

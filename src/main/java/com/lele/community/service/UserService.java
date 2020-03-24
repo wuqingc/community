@@ -18,7 +18,6 @@ public class UserService {
         UserExample userExample = new UserExample();
         userExample.createCriteria().andAccountIdEqualTo(user.getAccountId());
         List<User> users = userMapper.selectByExample(userExample);
-        System.out.println(users);
         if (users.isEmpty()){
             userMapper.insert(user);
         } else {

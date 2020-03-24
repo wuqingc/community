@@ -22,6 +22,7 @@
 * [visual paradigm](https://www.visual-paradigm.com/cn/):绘制需要的类图,时序图
 * [flyway管理数据库迁移](https://flywaydb.org/getstarted/firststeps/maven)
 * [Lombok工具集成](https://projectlombok.org/features/all)
+* [commons-lang3](https://mvnrepository.com/artifact/org.apache.commons/commons-lang3/3.9)
 
 ### 数据库
 
