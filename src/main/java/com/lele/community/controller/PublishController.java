@@ -1,21 +1,24 @@
 package com.lele.community.controller;
 
+import com.alibaba.fastjson.JSON;
+import com.lele.community.cache.TagCache;
 import com.lele.community.dto.QuestionDTO;
 import com.lele.community.mapper.QuestionMapper;
 import com.lele.community.mapper.UserMapper;
 import com.lele.community.model.Question;
 import com.lele.community.model.User;
 import com.lele.community.service.QuestionService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
+
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author xuan
@@ -32,7 +35,8 @@ public class PublishController {
 
 
     @GetMapping("/publish")
-    public String publish(){
+    public String publish(Model model){
+        model.addAttribute("selectTags",TagCache.get());
         return path;
     }
 
@@ -47,6 +51,39 @@ public class PublishController {
         return "publish";
     }
 
+    @PostMapping("/publish/verify")
+    @ResponseBody
+    public Object verify(@RequestBody QuestionDTO questionDTO,
+                         HttpServletRequest request
+                         ){
+        String title = questionDTO.getTitle();
+        String description = questionDTO.getDescription();
+        String tag = questionDTO.getTag();
+
+        User user = (User) request.getSession().getAttribute("user");
+        Map<String,String> errors = new HashMap<>();
+        if (user == null) {
+            errors.put(errorInfo, "用户未登录.");
+            return errors;
+        }
+        if (title == null || "".equals(title)){
+            errors.put(errorInfo,"标题不能为空.");
+            return errors;
+        }
+        if (description == null || "".equals(description)){
+            errors.put(errorInfo,"描述不能为空.");
+            return errors;
+        }
+        if (tag == null || "".equals(tag)){
+            errors.put(errorInfo,"标签不能为空.");
+            return errors;
+        }
+        if (!TagCache.isVaild(tag)) {
+            errors.put(errorInfo,"非法标签,不能自定义.");
+        }
+        return errors;
+    }
+
 
     @PostMapping("/publish")
     public String doPublish(@RequestParam(name = "title") String title,
@@ -56,6 +93,8 @@ public class PublishController {
                             HttpServletRequest request,
                             Model model
                             ){
+
+        model.addAttribute("selectTags",TagCache.get());
         /*
          * 失败后可以回显正确的数据.
          */
@@ -64,25 +103,16 @@ public class PublishController {
         model.addAttribute("tag",tag);
 
         /*
-         * 错误情形处理.
+         * 错误情形处理,在前端处理即可.
          */
-        if (title == null || "".equals(title)){
-            model.addAttribute(errorInfo,"标题不能为空.");
-            return path;
-        }
-        if (description == null || "".equals(description)){
-            model.addAttribute(errorInfo,"描述不能为空.");
-            return path;
-        }
-        if (tag == null || "".equals(tag)){
-            model.addAttribute(errorInfo,"标签不能为空.");
-            return path;
-        }
-
-
         User user = (User) request.getSession().getAttribute("user");
         if (user == null) {
             model.addAttribute(errorInfo, "用户未登录.");
+            return path;
+        }
+
+        if (StringUtils.isBlank(title) || StringUtils.isBlank(description) || StringUtils.isBlank(tag)
+                || !TagCache.isVaild(tag)){
             return path;
         }
 

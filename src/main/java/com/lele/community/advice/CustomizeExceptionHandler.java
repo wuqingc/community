@@ -51,7 +51,6 @@ public class CustomizeExceptionHandler {
             } else {
                 model.addAttribute("message",CustomizeErrorCode.SYSTEM_ERROR.getMessage());
             }
-
             return new ModelAndView("error");
         }
 

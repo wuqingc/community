@@ -49,8 +49,6 @@ function comment(e) {
 
 function collapseComments(e) {
     var id = e.getAttribute("data-id");
-
-
     Date.prototype.format = function (fmt) {
         var o = {
             "M+": this.getMonth() + 1, //月份
@@ -87,4 +85,44 @@ function collapseComments(e) {
         });
         $("#comment-" + id)[0].innerHTML = listInfo;
     })
+}
+
+function tagVerify() {
+    var tag = $("#tag").val();
+    var description = $("#description").val();
+    var title = $("#title").val();
+    var category = {"title":title, "description": description,"tag": tag};
+    //将JSON对象序列化为字符串.
+    var jsonData = JSON.stringify(category);
+
+    $.ajax({
+        type: "post",
+        url: "/publish/verify",
+        data: jsonData,
+        dataType: "json",
+        contentType: "application/json;charset=UTF-8",
+        success: function (result) {
+            alert(result.error);
+        }
+    });
+}
+
+function showSelectTag() {
+    $("#tag-div").show();
+    $(".tag-name:first").addClass("active");
+    $(".tag-info:first").addClass("active");
+}
+
+function selectTag(e) {
+    var val = e.getAttribute("data-id");
+    var tag = $("#tag").val();
+    if (tag.indexOf(val) === -1) {
+        if (tag) {
+            $("#tag").val(tag + "," + val);
+        } else {
+            $("#tag").val(val);
+        }
+    } else {
+        alert("请勿重复添加.")
+    }
 }
