@@ -102,7 +102,9 @@ function tagVerify() {
         dataType: "json",
         contentType: "application/json;charset=UTF-8",
         success: function (result) {
-            alert(result.error);
+            if (result.error) {
+                alert(result.error);
+            }
         }
     });
 }

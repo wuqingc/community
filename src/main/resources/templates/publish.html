@@ -43,9 +43,9 @@
                         </li>
                     </ul>
                     <!-- Tab panes -->
-                    <div class="tab-content">
+                    <div class="tab-content publish-tag-tab">
                         <div role="tabpanel" class="tab-pane tag-info" th:each="tag : ${selectTags}" th:id="${tag.categoryName}">
-                              <span class="label label-info glyphicon glyphicon-tags" style="cursor: pointer" th:each="info : ${tag.tags}"
+                              <span class="label label-primary" style="cursor: pointer" th:each="info : ${tag.tags}"
                                     th:data-id="${info}" th:text="${info}" onclick="selectTag(this)">
                               </span>
                         </div>
