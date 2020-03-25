@@ -89,13 +89,13 @@ public class QuestionService {
             questionDTOS.add(questionDTO);
         }
         questionDTOS.sort((o1,o2) -> (int) (o2.getGmtCreate() - o1.getGmtCreate()));
-        paginationDTO.setQuestionDTOS(questionDTOS);
+        paginationDTO.setData(questionDTOS);
 
         return paginationDTO;
     }
 
-    public PaginationDTO list(Long userId, Integer page, Integer size) {
-        PaginationDTO paginationDTO = new PaginationDTO();
+    public PaginationDTO<QuestionDTO> list(Long userId, Integer page, Integer size) {
+        PaginationDTO<QuestionDTO> paginationDTO = new PaginationDTO<>();
         /*
          * 设置总页数.
          */
@@ -128,7 +128,7 @@ public class QuestionService {
         Integer offset = size * (page - 1);
         QuestionExample questionExample1 = new QuestionExample();
         questionExample1.createCriteria().andIdEqualTo(userId);
-        List<Question> questions = questionMapper.selectByExampleWithBLOBsWithRowbounds(
+        List<Question> questions = questionMapper.selectByExampleWithRowbounds(
                 new QuestionExample(),new RowBounds(offset,size));
 
         /*
@@ -142,7 +142,7 @@ public class QuestionService {
             questionDTO.setUser(user);
             questionDTOS.add(questionDTO);
         }
-        paginationDTO.setQuestionDTOS(questionDTOS);
+        paginationDTO.setData(questionDTOS);
 
         return paginationDTO;
     }

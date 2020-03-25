@@ -3,6 +3,7 @@ package com.lele.community.interceptor;
 import com.lele.community.mapper.UserMapper;
 import com.lele.community.model.User;
 import com.lele.community.model.UserExample;
+import com.lele.community.service.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -23,6 +24,9 @@ public class SessionInterceptor implements HandlerInterceptor {
     @Autowired
     private UserMapper userMapper;
 
+    @Autowired
+    NotificationService notificationService;
+
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
@@ -38,9 +42,12 @@ public class SessionInterceptor implements HandlerInterceptor {
                     userExample.createCriteria().andTokenEqualTo(cookie.getValue());
 
                     List<User> users = userMapper.selectByExample(userExample);
-                    if (users.size() != 0) {
+                    if (!users.isEmpty()) {
                         User user = users.get(0);
                         request.getSession().setAttribute("user",user);
+
+                        Long unReadCount = notificationService.unReadCount(user.getId());
+                        request.getSession().setAttribute("unReadNotificationCount",unReadCount);
                     }
                     break;
                 }

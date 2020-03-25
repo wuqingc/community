@@ -1,6 +1,6 @@
 function post() {
     var questionId = $("#question_id").val();
-    var content = $(".comment").val();
+    var content = $("#comment").val();
     comment2Target(questionId,1,content);
 }
 
