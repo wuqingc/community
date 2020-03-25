@@ -32,6 +32,9 @@ public class QuestionController {
         questionService.inView(id);
         QuestionDTO questionDTO = questionService.listByQuestionId(id);
         model.addAttribute("question",questionDTO);
+
+        List<QuestionDTO> questionDTOS = questionService.selectRelated(questionDTO);
+        model.addAttribute("relatedQuestion",questionDTOS);
         return "question";
     }
 }

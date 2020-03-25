@@ -17,11 +17,11 @@
 
 <!-- 主体 -->
 <div class="container-fluid main">
-    <div class="row">
+    <div class="row" style="margin: 10px">
         <div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
-            <h4>
-                <span aria-hidden="true" th:text="${question.title}"></span>
-            </h4>
+            <h3>
+                <span aria-hidden="true" th:text="${question.title}" style="margin: 20px"></span>
+            </h3>
             <span class="text-desc">
                 作者: <span th:text="${question.user.name}"></span>&nbsp;|&nbsp;
                 发布时间: <span th:text="${#dates.format(question.gmtCreate,'YYYY-MM-dd HH:mm')}"></span>&nbsp;|&nbsp;
@@ -29,10 +29,13 @@
             </span>
             <hr>
 
-            <div th:text="${question.description}" style="margin: 35px;">
+            <div th:text="${question.description}" style="margin: 35px;"></div>
+            <hr>
 
+            <span class="label label-info" th:each="tag : ${question.tag.split(',')}"  style="margin-left:35px;font-size: 100%">
+                <span th:text="${tag}"></span>
+            </span>
 
-            </div>
             <hr>
             <div th:if="${session.user} != null and ${session.user.id} == ${question.creator}">
             <a class="community-menu" th:href="@{'/publish/' + ${question.id} }">
@@ -110,6 +113,27 @@
             </div>
             <hr>
 
+            <h4>相关问题</h4>
+            <div class="list-group">
+                <div class="list-group-item" th:each="related : ${relatedQuestion}">
+                    <a class="list-group-item-heading" th:text="${related.title}" th:href="@{'/question/' + ${related.id}}"></a>
+                </div>
+            </div>
+
+            <hr>
+
+            <h4>联系博主</h4>
+            <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                    <div class="thumbnail">
+                        <img src="/image/wechat.png" alt="个人微信">
+                        <div class="caption" style="margin: 10px">
+                            <p>Springboot,不仅仅是Springboot</p>
+                            <p><a href="https://github.com/wuqingc/community" class="btn btn-primary" role="button">GitHub</a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>

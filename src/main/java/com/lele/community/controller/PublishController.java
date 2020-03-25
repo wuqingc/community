@@ -56,9 +56,6 @@ public class PublishController {
                             HttpServletRequest request,
                             Model model
                             ){
-//        if ("".equals(id)){
-//            id = "0";
-//        }
         /*
          * 失败后可以回显正确的数据.
          */

@@ -27,4 +27,11 @@
         comment_count = comment_count + #{commentCount,jdbcType=INTEGER}
         where id = #{id,jdbcType=INTEGER}
     </update>
+
+    <select id="selectRelated" parameterType="com.lele.community.model.Question"
+            resultType="com.lele.community.model.Question">
+       select *
+       from question
+       where id != #{id} and tag regexp #{tag};
+    </select>
 </mapper>
