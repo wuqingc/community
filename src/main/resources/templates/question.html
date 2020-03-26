@@ -76,7 +76,7 @@
                     <div>
                         <span class="glyphicon glyphicon-thumbs-up icon-comment"></span>
                         <a role="button" data-toggle="collapse"  th:href="'#collapseExample' + ${comment.id}" th:data-id="${comment.id}" onclick="collapseComments(this)">
-                            <span class="glyphicon glyphicon glyphicon-comment icon-comment"></span>
+                            <span class="glyphicon glyphicon glyphicon-comment icon-comment" th:text="${comment.getCommentCount()}"></span>
                         </a>
                         <div th:class="collapse" th:id="'collapseExample' +  ${comment.id}">
                             <div class="well two-comment" >
@@ -96,11 +96,11 @@
             <div class="media">
                 <div class="media-left media-bottom">
                     <a href="#">
-                        <img class="media-object img-rounded" th:src="${question.user.avatarUrl}">
+                        <img class="media-object img-rounded" th:src="${session.user != null ? session.user.avatarUrl : '/images/default.png'}">
                     </a>
                 </div>
                 <div class="media-body">
-                    <h4 class="media-heading question-media" th:text="${question.user.name}">
+                    <h4 class="media-heading question-media" th:text="${session.user != null ? session.user.name : '匿名用户'}">
                     </h4>
                 </div>
             </div>

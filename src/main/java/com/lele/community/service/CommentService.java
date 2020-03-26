@@ -58,7 +58,7 @@ public class CommentService {
             if (dbComment == null) {
                 throw new CustomizeException(CustomizeErrorCode.COMMENT_NOT_FOUND);
             }
-            Question question = questionMapper.selectByPrimaryKey(comment.getParentId());
+            Question question = questionMapper.selectByPrimaryKey(dbComment.getParentId());
             if (question == null) {
                 throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
             }
@@ -125,9 +125,15 @@ public class CommentService {
          * 将评论人与Comment记录联系起来,封装成一个记录返回.
          */
 
+
         return comments.stream().map(comment -> {
             CommentCreateDTO commentCreateDTO = new CommentCreateDTO();
             BeanUtils.copyProperties(comment,commentCreateDTO);
+
+            CommentExample commentExample1 = new CommentExample();
+            commentExample1.createCriteria().andParentIdEqualTo(comment.getId()).andTypeEqualTo(CommentTypeEnum.COMMENT.getType());
+            commentCreateDTO.setCommentCount(commentMapper.countByExample(commentExample1));
+
             commentCreateDTO.setUser(userMap.get(commentCreateDTO.getCommentator()));
             return commentCreateDTO;
         }).collect(Collectors.toList());

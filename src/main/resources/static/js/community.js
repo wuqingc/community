@@ -40,10 +40,9 @@ function comment2Target(targetId,type,content) {
 }
 
 function comment(e) {
-    var commentId = e.getAttribute("data-id");
-    var content = $("#input-" + commentId).val();
-    console.log(commentId + "   " + content);
-    comment2Target(commentId,2,content);
+    var parentId = e.getAttribute("data-id");
+    var content = $("#input-" + parentId).val();
+    comment2Target(parentId,2,content);
 }
 
 
