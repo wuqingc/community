@@ -10,6 +10,11 @@
     <script src="/js/jquery-3.4.1.min.js" type="application/javascript"></script>
     <script src="/js/bootstrap.min.js" type="application/javascript"></script>
     <script src="/js/community.js" type="application/javascript"></script>
+    <link rel="stylesheet" href="/css/editormd.preview.css" />
+
+    <script src="/js/editormd.min.js"></script>
+    <script src="/markdown/lib/marked.min.js"></script>
+    <script src="/markdown/lib/prettify.min.js"></script>
 </head>
 <body>
 
@@ -29,7 +34,15 @@
             </span>
             <hr>
 
-            <div th:text="${question.description}" style="margin: 35px;"></div>
+            <div id="test-markdown-view">
+                <textarea style="display:none;" th:text="${question.description}"></textarea>
+            </div>
+            <script type="text/javascript">
+                $(function() {
+                    var testView = editormd.markdownToHTML("test-markdown-view", {
+                    });
+                });
+            </script>
             <hr>
 
             <span class="label label-info" th:each="tag : ${question.tag.split(',')}"  style="margin-left:35px;font-size: 100%">
@@ -126,7 +139,7 @@
             <div class="row">
                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                     <div class="thumbnail">
-                        <img src="/image/wechat.png" alt="个人微信">
+                        <img src="/images/wechat.png" alt="个人微信">
                         <div class="caption" style="margin: 10px">
                             <p>Springboot,不仅仅是Springboot</p>
                             <p><a href="https://github.com/wuqingc/community" class="btn btn-primary" role="button">GitHub</a></p>

@@ -38,7 +38,7 @@ public class IndexController {
         /*
          * 实现查找记录,并将查找到的记录封装成一个对象传递给前台.
          */
-        PaginationDTO pagination = questionService.list(page,size);
+        PaginationDTO<QuestionDTO> pagination = questionService.list(page,size);
         model.addAttribute("pagination",pagination);
         return "index";
     }

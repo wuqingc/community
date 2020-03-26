@@ -44,8 +44,8 @@ public class QuestionService {
      * @param size
      * @return 当前页面的数据,将其封装在一个DTO中.
      */
-    public PaginationDTO list(Integer page, Integer size) {
-        PaginationDTO paginationDTO = new PaginationDTO();
+    public PaginationDTO<QuestionDTO> list(Integer page, Integer size) {
+        PaginationDTO<QuestionDTO> paginationDTO = new PaginationDTO<>();
         /*
          * 设置总页数.
          */
@@ -74,8 +74,13 @@ public class QuestionService {
          * 算出偏移量,然后与页数一起作为参数查找,返回符合条件的问题列表.
          */
         int offset = size * (page - 1);
+        QuestionExample questionExample = new QuestionExample();
+        /*
+         * 排序语句,按时间降序排列.
+         */
+        questionExample.setOrderByClause("gmt_create desc");
         List<Question> questions = questionMapper.selectByExampleWithBLOBsWithRowbounds(
-                new QuestionExample(),new RowBounds(offset,size));
+                questionExample,new RowBounds(offset,size));
 
         /*
          * 封装之后返回当前页对象.
@@ -88,7 +93,7 @@ public class QuestionService {
             questionDTO.setUser(user);
             questionDTOS.add(questionDTO);
         }
-        questionDTOS.sort((o1,o2) -> (int) (o2.getGmtCreate() - o1.getGmtCreate()));
+
         paginationDTO.setData(questionDTOS);
 
         return paginationDTO;
