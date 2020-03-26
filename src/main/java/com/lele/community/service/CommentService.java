@@ -87,6 +87,14 @@ public class CommentService {
      * 创建通知.
      */
     private void createNotify(Comment comment, Long receiver, String notifierName, String outerTitle, NotificationTypeEnum rerplyComment,Long outerId) {
+
+        /*
+         * 自己回复自己,不需要通知.
+         */
+//        if (receiver.equals(comment.getCommentator())) {
+//            return;
+//        }
+
         Notification notification = new Notification();
         notification.setGmtCreate(System.currentTimeMillis());
         notification.setType(rerplyComment.getType());

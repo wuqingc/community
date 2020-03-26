@@ -60,7 +60,7 @@ public class NotificationService {
         int offset = size * (page - 1);
         NotificationExample example = new NotificationExample();
         example.createCriteria().andReceiverEqualTo(id);
-        example.setOrderByClause("gmt_create desc");
+        example.setOrderByClause("status, gmt_create desc ");
         List<Notification> notifications = notificationMapper.selectByExampleWithRowbounds(
                 example,new RowBounds(offset,size));
 

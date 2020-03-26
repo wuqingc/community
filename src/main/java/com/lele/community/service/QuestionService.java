@@ -44,7 +44,14 @@ public class QuestionService {
      * @param size
      * @return 当前页面的数据,将其封装在一个DTO中.
      */
-    public PaginationDTO<QuestionDTO> list(Integer page, Integer size) {
+    public PaginationDTO<QuestionDTO> list(String search,Integer page, Integer size) {
+
+        if (StringUtils.isNotBlank(search)){
+            String[] tags = StringUtils.split(search," ");
+            search = Arrays.stream(tags).collect(Collectors.joining("|"));
+        }
+
+
         PaginationDTO<QuestionDTO> paginationDTO = new PaginationDTO<>();
         /*
          * 设置总页数.
