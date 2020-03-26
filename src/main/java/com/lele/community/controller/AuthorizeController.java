@@ -6,6 +6,7 @@ import com.lele.community.mapper.UserMapper;
 import com.lele.community.model.User;
 import com.lele.community.provider.GitHubProvider;
 import com.lele.community.service.UserService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -21,6 +22,7 @@ import java.io.IOException;
 import java.util.UUID;
 
 @Controller
+@Slf4j
 public class AuthorizeController {
 
     @Autowired
@@ -85,6 +87,8 @@ public class AuthorizeController {
             user.setAvatarUrl(gitHubUser.getAvatar_url());
             userService.updateOrInsert(user);
             response.addCookie(new Cookie("token",token));
+        } else {
+            log.error("callback get github error,{}",gitHubUser);
         }
         return "redirect:/";
     }
