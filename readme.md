@@ -34,7 +34,3 @@
 * mvn -Dmybatis.generator.overwrite=true mybatis-generator:generate
 * mvn flyway:migrate
 * 测试working copy
-
-
-
-test
